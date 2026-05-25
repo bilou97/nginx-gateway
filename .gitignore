@@ -1,2 +1,1 @@
-certbot/conf/
-certbot/www/
+# Les données Caddy sont dans des volumes Docker, rien à ignorer ici

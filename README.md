@@ -1,6 +1,6 @@
-# nginx-gateway
+# caddy-gateway
 
-Reverse proxy central pour papobilou.ch. Gère le SSL (Let's Encrypt) et le routing vers les différents projets Docker de la VM.
+Reverse proxy central pour papobilou.ch. Caddy gère automatiquement le SSL via Let's Encrypt.
 
 ## Domaines configurés
 
@@ -13,7 +13,7 @@ Reverse proxy central pour papobilou.ch. Gère le SSL (Let's Encrypt) et le rout
 
 ```
 Internet (80/443)
-    └── nginx-gateway
+    └── caddy-gateway
             ├── actual.papobilou.ch  → réseau actual_default  → actual:5006
             └── blog.papobilou.ch   → réseau personal_blog_default → frontend/backend
 ```
@@ -22,24 +22,24 @@ Internet (80/443)
 
 - Les projets `actual` et `personal_blog` doivent être démarrés avant le gateway
 - Les réseaux Docker `actual_default` et `personal_blog_default` doivent exister
+- Les DNS `actual.papobilou.ch` et `blog.papobilou.ch` pointent vers l'IP de la VM
 
-## Première installation
+## Démarrage
 
 ```bash
-# 1. Obtenir les certificats SSL (un par domaine)
-bash scripts/init-ssl.sh actual.papobilou.ch ton@email.com
-bash scripts/init-ssl.sh blog.papobilou.ch ton@email.com
+# S'assurer que les autres projets tournent d'abord
+# cd ~/actual && docker compose up -d
+# cd ~/personal_blog && docker compose up -d
 
-# 2. Démarrer le gateway complet
+# Lancer le gateway (Caddy obtient les certs SSL automatiquement)
 docker compose up -d
 ```
 
 ## Ajouter un nouveau domaine
 
-1. Créer `nginx/conf.d/<nouveau-domaine>.conf`
+1. Ajouter un bloc dans `Caddyfile`
 2. Ajouter le réseau du projet dans `docker-compose.yml`
-3. Obtenir le certificat : `bash scripts/init-ssl.sh nouveau-domaine.ch email`
-4. `docker compose up -d`
+3. `docker compose up -d` — Caddy obtient le cert tout seul
 
 ## Mise à jour
 

@@ -1,0 +1,14 @@
+actual.papobilou.ch {
+    reverse_proxy actual:5006 {
+        header_up Cross-Origin-Opener-Policy same-origin
+        header_up Cross-Origin-Embedder-Policy require-corp
+    }
+}
+
+blog.papobilou.ch {
+    reverse_proxy /api/* personal_blog-backend-1:8000
+    reverse_proxy /admin/* personal_blog-backend-1:8000
+    reverse_proxy /static/* personal_blog-backend-1:8000
+    reverse_proxy /media/* personal_blog-backend-1:8000
+    reverse_proxy * personal_blog-frontend-1:80
+}
