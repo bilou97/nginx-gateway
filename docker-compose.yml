@@ -17,10 +17,10 @@ services:
 networks:
   actual_network:
     external: true
-    name: actual_default
+    name: actual_docker_install_default
   blog_network:
     external: true
-    name: personal_blog_default
+    name: blog_default
 
 volumes:
   caddy_data:
