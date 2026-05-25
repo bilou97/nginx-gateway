@@ -17,7 +17,7 @@ services:
 networks:
   actual_network:
     external: true
-    name: actual_docker_install_default
+    name: actual-budget_default
   blog_network:
     external: true
     name: blog_default
