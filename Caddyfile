@@ -8,3 +8,7 @@ actual.papobilou.ch {
 blog.papobilou.ch {
     reverse_proxy web:80
 }
+
+floorball.papobilou.ch {
+    reverse_proxy nginx:80
+}

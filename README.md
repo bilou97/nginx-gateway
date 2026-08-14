@@ -8,28 +8,31 @@ Reverse proxy central pour papobilou.ch. Caddy gère automatiquement le SSL via 
 |---|---|
 | actual.papobilou.ch | actual/ |
 | blog.papobilou.ch | personal_blog/ |
+| floorball.papobilou.ch | luc_floorball/ |
 
 ## Architecture
 
 ```
 Internet (80/443)
     └── caddy-gateway
-            ├── actual.papobilou.ch  → réseau actual_default  → actual:5006
-            └── blog.papobilou.ch   → réseau personal_blog_default → frontend/backend
+            ├── actual.papobilou.ch    → réseau actual-budget_default → actual:5006
+            ├── blog.papobilou.ch      → réseau blog_default          → web:80
+            └── floorball.papobilou.ch → réseau luc_floorball_default → nginx:80
 ```
 
 ## Prérequis
 
-- Les projets `actual` et `personal_blog` doivent être démarrés avant le gateway
-- Les réseaux Docker `actual_default` et `personal_blog_default` doivent exister
-- Les DNS `actual.papobilou.ch` et `blog.papobilou.ch` pointent vers l'IP de la VM
+- Les projets `actual`, `personal_blog` et `luc_floorball` doivent être démarrés avant le gateway (profil `prod` pour `luc_floorball`)
+- Les réseaux Docker `actual-budget_default`, `blog_default` et `luc_floorball_default` doivent exister
+- Les DNS `actual.papobilou.ch`, `blog.papobilou.ch` et `floorball.papobilou.ch` pointent vers l'IP de la VM
 
 ## Démarrage
 
 ```bash
 # S'assurer que les autres projets tournent d'abord
 # cd ~/actual && docker compose up -d
-# cd ~/personal_blog && docker compose up -d
+# cd ~/personal_blog && docker compose -f docker-compose.yml -f docker-compose.prod.yml -p blog up -d
+# cd ~/luc_floorball && docker compose up -d
 
 # Lancer le gateway (Caddy obtient les certs SSL automatiquement)
 docker compose up -d
